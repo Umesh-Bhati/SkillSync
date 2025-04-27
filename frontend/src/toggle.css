@@ -1,0 +1,20 @@
+/* Toggle Button Styles */
+.toggle-checkbox {
+  border-color: #e2e8f0;
+  transition: 0.4s;
+  z-index: 1;
+}
+
+.toggle-checkbox:checked {
+  right: 0;
+  transform: translateX(100%);
+  border-color: #0284c7;
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  background-color: #0ea5e9;
+}
+
+.toggle-label {
+  transition: background-color 0.4s;
+}

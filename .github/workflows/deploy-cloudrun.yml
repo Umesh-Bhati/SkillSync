@@ -1,0 +1,54 @@
+name: Deploy to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: Build (if needed)
+        run: |
+          cd backend
+          npm run build || echo "No build script, skipping."
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Configure Docker for gcloud
+        run: gcloud auth configure-docker
+
+      - name: Build and push Docker image
+        run: |
+          cd backend
+          gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/skillsync-backend:latest .
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy skillsync-backend \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/skillsync-backend:latest \
+            --platform managed \
+            --region ${{ secrets.GCP_REGION }} \
+            --allow-unauthenticated
+
+      - name: Post-deployment info
+        run: echo "Deployed to Cloud Run!"

@@ -1,0 +1,50 @@
+# Node.js
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Build outputs
+dist/
+build/
+backend/dist/
+backend/build/
+backend/uploads/
+frontend/dist/
+frontend/build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Trash/IDE
+.vscode/
+.idea/
+.env
+.env.*
+
+# Misc
+*.log
+*.sqlite3
+*.db
+
+# Ignore run.py and similar scripts at root or subdirectories
+run_app.sh
+**/run.py
+resumeai-457711-1e55318ace07.json
+
+# Trash/temp directories
+trash/
+**/trash/
+temp/
+**/temp/
