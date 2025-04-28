@@ -37,7 +37,6 @@ const AnimatedCircularBar: React.FC<AnimatedCircularBarProps> = ({
     animationRef.current = requestAnimationFrame(step);
   };
 
-  // On mount or percentage change, animate from 0 to percentage
   useEffect(() => {
     animateTo(0, percentage);
     return () => {
@@ -49,7 +48,6 @@ const AnimatedCircularBar: React.FC<AnimatedCircularBarProps> = ({
     // eslint-disable-next-line
   }, [percentage]);
 
-  // On hover, animate from 0 to percentage
   const handleMouseEnter = () => {
    if(!isAnimating.current) animateTo(0, percentage);
   };
@@ -108,7 +106,7 @@ const AnimatedCircularBar: React.FC<AnimatedCircularBarProps> = ({
       >
         <span
           className="font-bold"
-          style={{ fontSize: size * 0.21, lineHeight: 1, color: 'white' }}
+          style={{ fontSize: size * 0.15, lineHeight: 1, color: 'white' }}
         >
           {Math.round(progress)}%
         </span>
