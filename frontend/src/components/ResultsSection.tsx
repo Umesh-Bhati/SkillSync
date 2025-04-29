@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import SkillTag from './SkillTag';
 import RoadmapRecommendation from './RoadmapRecommendation';
 import AnimatedCircularBar from './AnimatedCircularBar';
@@ -13,15 +13,6 @@ interface ResultsSectionProps {
   jobTitle?: string;
 }
 
-interface SkillCategory {
-  name: string;
-  icon: React.ReactNode;
-  skills: {
-    matched: string[];
-    missing: string[];
-  };
-}
-
 export default function ResultsSection({
   results,
   plan,
@@ -34,83 +25,12 @@ export default function ResultsSection({
     return total > 0 ? Math.round((results.matched.length / total) * 100) : 0;
   };
 
-  // Group skills into categories
-  const categorizeSkills = () => {
-    if (!results) return [];
 
-    // Define categories with icons
-    const categories: SkillCategory[] = [
-      {
-        name: 'Programming & Languages',
-        icon: (
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-          </svg>
-        ),
-        skills: {
-          matched: filterSkillsByCategory(results.matched, ['JavaScript', 'TypeScript', 'HTML', 'CSS', 'GraphQL']),
-          missing: filterSkillsByCategory(results.missing, ['GraphQL', 'SASS', 'LESS'])
-        }
-      },
-      {
-        name: 'Frameworks & Libraries',
-        icon: (
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z" />
-          </svg>
-        ),
-        skills: {
-          matched: filterSkillsByCategory(results.matched, ['React', 'Redux', 'Framework']),
-          missing: filterSkillsByCategory(results.missing, ['NextJS', 'Server-side Rendering'])
-        }
-      },
-      {
-        name: 'Tools & Infrastructure',
-        icon: (
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-          </svg>
-        ),
-        skills: {
-          matched: filterSkillsByCategory(results.matched, ['Git', 'Version Control', 'Testing', 'Jest']),
-          missing: filterSkillsByCategory(results.missing, ['CI/CD', 'AWS', 'Docker'])
-        }
-      },
-      {
-        name: 'Experience & Expertise',
-        icon: (
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
-            <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
-          </svg>
-        ),
-        skills: {
-          matched: filterSkillsByCategory(results.matched, ['UI/UX', 'Performance', 'Responsive', 'Development']),
-          missing: filterSkillsByCategory(results.missing, ['years experience', 'Mentoring'])
-        }
-      }
-    ];
-
-    return categories;
-  };
-
-  // Helper function to filter skills by category keywords
-  function filterSkillsByCategory(skills: string[], keywords: string[]): string[] {
-    return skills.filter(skill =>
-      keywords.some(keyword =>
-        skill.toLowerCase().includes(keyword.toLowerCase())
-      )
-    );
-  }
-
-  // const matchPercentage = calculateMatchPercentage();
-  // const skillCategories = categorizeSkills();
 
 
   if (!results) return null;
 
   const matchPercentage = calculateMatchPercentage();
-  const skillCategories = categorizeSkills();
 
   return (
 

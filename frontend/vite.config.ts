@@ -16,6 +16,7 @@ export default defineConfig({
     // Open browser on start
     open: true,
   },
+  base: '/SkillSync',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

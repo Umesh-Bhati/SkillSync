@@ -117,7 +117,7 @@ export default function AppPage() {
       const formData = new FormData();
       formData.append('resume', resumeFile);
       formData.append('jobDescription', jobDescription);
-      const response = await fetch('http://localhost:3000/api/v1/analyze-resume', {
+      const response = await fetch('https://skillsync-service-292223199433.asia-south1.run.app/api/v1/analyze-resume', {
         method: 'POST',
         body: formData,
       });
@@ -212,7 +212,6 @@ export default function AppPage() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                     }
-                    file={resumeFile}
                     onChangeFile={setResumeFile}
                   />
                 </AnimatedElement>

@@ -17,7 +17,7 @@ export default function Header() {
 
 
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-gray-300 hover:text-white transition-colors">Features</a>
+            {/* <a href="#features" className="text-gray-300 hover:text-white transition-colors">Features</a> */}
             <a href="#feedback" className="text-gray-300 hover:text-white transition-colors">Roadmap</a>
             <a href="#share-ideas" className="text-gray-300 hover:text-white transition-colors">Feedback</a>
             <a href="#support" className="text-gray-300 hover:text-white transition-colors">Support</a>

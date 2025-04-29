@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface PlanBannerProps {
   plan: 'free' | 'pro';
   onUpgrade?: () => void;

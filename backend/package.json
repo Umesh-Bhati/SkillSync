@@ -4,7 +4,7 @@
   "description": "Cloud Functions for AI Job Seeker Tool",
   "main": "lib/cloud-functions/resumeProcessor.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node dist/server.js",
     "dev": "nodemon --watch src --ext ts,js --exec ts-node src/server.ts",
     "build": "tsc",
     "deploy-resume-processor": "gcloud functions deploy processResume --runtime nodejs20 --trigger-resource resume-bucket --trigger-event google.cloud.storage.object.v1.finalized --entry-point processResume",
