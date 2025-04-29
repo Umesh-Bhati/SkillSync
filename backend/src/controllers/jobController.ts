@@ -7,7 +7,8 @@ export const analyzeJobDescription = async (req: Request, res: Response) => {
     const { jobDescription } = req.body;
     
     if (!jobDescription) {
-      return res.status(400).json({ message: 'Job description is required' });
+      res.status(400).json({ message: 'Job description is required' });
+      return;
     }
     
     // Generate interview questions based on job description
@@ -28,9 +29,10 @@ export const evaluateAnswer = async (req: Request, res: Response) => {
     const { question, answer } = req.body;
     
     if (!question || !answer) {
-      return res.status(400).json({ 
+      res.status(400).json({ 
         message: 'Question and answer are required' 
       });
+      return;
     }
     
     // Evaluate the answer
@@ -51,9 +53,10 @@ export const matchResumeToJob = async (req: Request, res: Response) => {
     const { resume, jobDescription } = req.body;
     
     if (!resume || !jobDescription) {
-      return res.status(400).json({ 
+      res.status(400).json({ 
         message: 'Resume and job description are required' 
       });
+      return;
     }
     
     // Parse job description

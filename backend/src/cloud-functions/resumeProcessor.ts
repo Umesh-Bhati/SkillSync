@@ -13,11 +13,7 @@ const openai = new OpenAI({
 const RESUME_TOPIC = 'resume-analysis-topic';
 const JOB_MATCH_TOPIC = 'job-match-topic';
 
-/**
- * Cloud Function triggered by Cloud Storage when a new resume is uploaded
- * This demonstrates event-driven architecture with Google Cloud
- */
-functions.cloudEvent('processResume', async (cloudEvent) => {
+functions.cloudEvent('processResume', async (cloudEvent: any) => {
   try {
     console.log('Processing resume upload event:', cloudEvent.id);
     
@@ -55,7 +51,7 @@ functions.cloudEvent('processResume', async (cloudEvent) => {
  * Cloud Function triggered by Pub/Sub when a job description is added
  * Demonstrates pub/sub messaging in event-driven architecture
  */
-functions.cloudEvent('matchJobToResumes', async (cloudEvent) => {
+functions.cloudEvent('matchJobToResumes', async (cloudEvent: any) => {
   try {
     const messageData = JSON.parse(
       Buffer.from(cloudEvent.data.message.data, 'base64').toString()
@@ -105,10 +101,7 @@ functions.cloudEvent('matchJobToResumes', async (cloudEvent) => {
   }
 });
 
-/**
- * Cloud Function triggered by HTTP request
- * Demonstrates using a traditional HTTP trigger alongside event-driven functions
- */
+
 functions.http('uploadJobDescription', async (req, res) => {
   try {
     const { jobId, title, company, description, requirements } = req.body;
@@ -140,9 +133,7 @@ functions.http('uploadJobDescription', async (req, res) => {
   }
 });
 
-/**
- * Helper function to extract resume information using LLM
- */
+
 async function extractResumeInfo(resumeText: string) {
   const response = await openai.chat.completions.create({
     model: 'gpt-4',
@@ -162,9 +153,6 @@ async function extractResumeInfo(resumeText: string) {
   return JSON.parse(response.choices[0].message.content || '{}');
 }
 
-/**
- * Helper function to calculate match score
- */
 async function calculateMatchScore(resumeData: any, jobDescription: any) {
   // Implementation would use the embedding service from previous code
   // For demo purposes, we'll return a random score

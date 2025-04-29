@@ -7,11 +7,10 @@ interface FileUploadProps {
     onChange: (text: string) => void;
     placeholder: string;
     icon: React.ReactNode;
-    file: File | null;
     onChangeFile: (file: File | null) => void;
   }
   
-  const FileUploadInput = ({ label, value, icon, file, onChangeFile }: FileUploadProps) => {
+  const FileUploadInput = ({ label, value, icon, onChangeFile }: FileUploadProps) => {
     const [dragActive, setDragActive] = useState(false);
     const [fileName, setFileName] = useState('');
     const [uploadError, setUploadError] = useState('');

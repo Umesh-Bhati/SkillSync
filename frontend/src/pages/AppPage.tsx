@@ -78,6 +78,9 @@ export default function AppPage() {
     missing: string[];
     suggestions: string[];
   } | null>(null);
+  const [tokenQuota, setTokenQuota] = useState<number | null>(null);
+  const [tokensUsed, setTokensUsed] = useState<number | null>(null);
+  const [tokensThisRequest, setTokensThisRequest] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [jobTitle, setJobTitle] = useState<string>('');
 
@@ -114,7 +117,7 @@ export default function AppPage() {
       const formData = new FormData();
       formData.append('resume', resumeFile);
       formData.append('jobDescription', jobDescription);
-      const response = await fetch('http://localhost:3000/api/v1/analyze-resume', {
+      const response = await fetch('https://skillsync-service-292223199433.asia-south1.run.app/api/v1/analyze-resume', {
         method: 'POST',
         body: formData,
       });
@@ -125,6 +128,9 @@ export default function AppPage() {
         missing: data.missingSkills,
         suggestions: data.suggestions || [],
       });
+      setTokenQuota(data.tokenQuota ?? null);
+      setTokensUsed(data.tokensUsed ?? null);
+      setTokensThisRequest(data.tokensThisRequest ?? null);
       setActiveStep('results');
     } catch (err) {
       alert('Failed to analyze resume');
@@ -206,7 +212,6 @@ export default function AppPage() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                     }
-                    file={resumeFile}
                     onChangeFile={setResumeFile}
                   />
                 </AnimatedElement>
@@ -269,16 +274,55 @@ export default function AppPage() {
                 </div>
               ) : results && (
                 <div className="relative">
-                  <button
-                    onClick={() => setActiveStep('input')}
-                    className="absolute -top-2 left-0 flex items-center text-gray-400 hover:text-white transition-colors"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-                    </svg>
-                    <span>Back to Input</span>
-                  </button>
-
+                {(tokenQuota !== null && tokensUsed !== null && tokensThisRequest !== null) && (
+                  <div className="mb-8 rounded-2xl bg-gradient-to-br from-indigo-900/70 to-purple-900/60 border border-indigo-400/20 shadow-xl backdrop-blur-md p-6 transition-all">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 w-full">
+                      {/* Progress Bar Section */}
+                      <div className="flex-1 min-w-[220px] max-w-md mx-auto md:mx-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                            <path d="M12 4v16m8-8H4" />
+                          </svg>
+                          <span className="text-xs text-indigo-200 font-semibold tracking-wide">Token Quota</span>
+                        </div>
+                        <div className="relative w-full h-3 bg-indigo-800/40 rounded-full overflow-hidden">
+                          <div
+                            className="absolute left-0 top-0 h-full bg-gradient-to-r from-indigo-400 via-purple-400 to-green-400 rounded-full transition-all"
+                            style={{ width: `${Math.min((tokensUsed / tokenQuota) * 100, 100)}%` }}
+                          />
+                        </div>
+                        <div className="flex justify-between text-xs mt-1 text-indigo-300">
+                          <span>{tokensUsed}</span>
+                          <span>{tokenQuota}</span>
+                        </div>
+                      </div>
+                      {/* Stat Chips */}
+                      <div className="flex flex-row flex-wrap justify-center items-center gap-2 md:gap-4">
+                        <div className="flex items-center gap-2 bg-indigo-800/60 px-3 py-1 rounded-full shadow-inner text-indigo-100 font-medium">
+                          <svg className="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 8v4l2 2" />
+                          </svg>
+                          Used this upload: <span className="text-white">{tokensThisRequest}</span>
+                        </div>
+                        <div className="flex items-center gap-2 bg-purple-800/60 px-3 py-1 rounded-full shadow-inner text-purple-100 font-medium">
+                          <svg className="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                            <path d="M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z" />
+                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          Total used: <span className="text-white">{tokensUsed}</span>
+                        </div>
+                        <div className="flex items-center gap-2 bg-green-800/60 px-3 py-1 rounded-full shadow-inner text-green-100 font-medium">
+                          <svg className="w-4 h-4 text-green-300" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                            <path d="M5 13l4 4L19 7" />
+                          </svg>
+                          Remaining: <span className="text-white">{tokenQuota - tokensUsed}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
                   <ResultsSection
                     results={results}
                     jobTitle={jobTitle}
